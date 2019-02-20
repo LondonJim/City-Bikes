@@ -4,7 +4,7 @@ describe DockingStation do
 
   before(:each) do
     @bike = double(Bike)
-    allow(@bike).to receive(:working?).and_return(true)
+    allow(@bike).to receive(:broken).and_return(false)
     @docking_station = DockingStation.new
   end
 
@@ -22,6 +22,15 @@ describe DockingStation do
     it 'raises error if there are no bike objects' do
       expect { @docking_station.release_bike }.to raise_error 'No bikes available'
     end
+
+    it 'returns bike object that is not broken true' do
+      @broken_bike = double(Bike)
+      allow(@broken_bike).to receive(:broken).and_return(true)
+      @docking_station.instance_variable_set(:@bikes, [@broken_bike, @bike, @broken_bike])
+
+      expect(@docking_station.release_bike).to eq(@bike)
+    end
+
   end
 
   describe '#dock' do

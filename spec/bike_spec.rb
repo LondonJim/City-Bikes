@@ -8,21 +8,22 @@ describe Bike do
 
   describe '#report_broken' do
 
-    it 'returns true when executed' do
+    it 'returns true' do
       expect(@bike.report_broken).to eq(true)
     end
 
   end
 
-  describe '#broken' do
+  describe '#broken?' do
 
-    it 'returns nil if object not created' do
-      expect(@bike.broken?).to eq(nil)
+    it 'can return false' do
+      @bike.instance_variable_set(:@broken, false)
+      expect(@bike.broken).to eq(false)
     end
 
-    it 'returns true if object is created' do
+    it 'can return true' do
       @bike.instance_variable_set(:@broken, true)
-      expect(@bike.broken?).to eq(true)
+      expect(@bike.broken).to eq(true)
     end
 
   end
