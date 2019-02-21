@@ -31,6 +31,14 @@ describe DockingStation do
       expect(@docking_station.release_bike).to eq(@bike)
     end
 
+    it 'raises error if all the bike objects are broken' do
+      @broken_bike = double(Bike)
+      allow(@broken_bike).to receive(:broken).and_return(true)
+      @docking_station.instance_variable_set(:@bikes, [@broken_bike, @broken_bike])
+
+      expect { @docking_station.release_bike }.to raise_error 'No bikes available'
+    end
+
   end
 
   describe '#dock' do

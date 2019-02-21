@@ -14,12 +14,13 @@ class DockingStation
   end
 
   def release_bike
-    fail 'No bikes available' if empty?
-    for i in 0..@bikes.count
+    bike_release_fail if empty?
+    for i in 0...@bikes.count
       unless @bikes[i].broken
         return @bikes.delete_at(i)
       end
     end
+    bike_release_fail
   end
 
   private
@@ -32,6 +33,10 @@ class DockingStation
 
   def empty?
     @bikes.empty?
+  end
+
+  def bike_release_fail
+    fail 'No bikes available'
   end
 
 end
