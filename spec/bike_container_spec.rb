@@ -10,4 +10,69 @@ describe BikeContainerTest do
     expect(subject.capacity).to eq BikeContainer::DEFAULT_CAPACITY
   end
 
+
+  before(:each) do
+    @bike = double(Bike)
+    allow(@bike).to receive(:broken).and_return(false)
+    @bike_container_test = BikeContainerTest.new
+  end
+
+  it 'responds to release #release_bike' do
+    expect(@bike_container_test).to respond_to(:release_bike)
+  end
+
+  describe "#release_bike" do
+
+    it 'raises error if there are no bike objects' do
+      expect { @bike_container_test.release_bike }.to raise_error 'No bikes available'
+    end
+
+    it 'returns bike object that is not broken' do
+      @broken_bike = double(Bike)
+      allow(@broken_bike).to receive(:broken).and_return(true)
+      @bike_container_test.instance_variable_set(:@bikes, [@broken_bike, @bike, @broken_bike])
+
+      expect(@bike_container_test.release_bike).to eq(@bike)
+    end
+
+    it 'raises error if all the bike objects are broken' do
+      @broken_bike = double(Bike)
+      allow(@broken_bike).to receive(:broken).and_return(true)
+      @bike_container_test.instance_variable_set(:@bikes, [@broken_bike, @broken_bike])
+
+      expect { @bike_container_test.release_bike }.to raise_error 'No bikes available'
+    end
+
+  end
+
+  describe '#add_bike' do
+
+    it 'stores a bike object' do
+      expect(@bike_container_test.add_bike(@bike)).to eq([@bike])
+    end
+
+    it 'raises an error when full' do
+      20.times { @bike_container_test.add_bike(@bike)}
+      expect { @bike_container_test.add_bike(@bike) }.to raise_error 'Capacity full'
+    end
+
+  end
+
+  describe '#release_broken_bikes' do
+
+    it 'returns an array of broken bikes' do
+      @broken_bike = double(Bike)
+      allow(@broken_bike).to receive(:broken).and_return(true)
+      @bike_container_test.instance_variable_set(:@bikes, [@broken_bike, @broken_bike, @bike, @bike])
+
+      expect(@bike_container_test.release_broken_bike).to eq(@broken_bike)
+    end
+
+    it 'raises error if no broken bikes' do
+      @bike_container_test.instance_variable_set(:@bikes, [@bike, @bike])
+
+      expect { @bike_container_test.release_broken_bike }.to raise_error 'No bikes available'
+    end
+
+  end
 end

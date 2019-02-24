@@ -41,7 +41,7 @@ describe DockingStation do
 
   end
 
-  describe '#dock' do
+  describe '#add_bike' do
 
     it 'stores a bike object' do
       expect(@docking_station.add_bike(@bike)).to eq([@bike])
