@@ -1,11 +1,22 @@
 require_relative 'bike'
 
-class Van
+class Garage
 
   CAPACITY = 20
 
   def initialize
     @bikes = []
+  end
+
+  def fix_bike
+    bike_release_fail if empty?
+    for i in 0...@bikes.count
+      if @bikes[i].broken
+        @bikes[i].broken == false
+        return @bikes[i]
+      end
+    end
+    fail 'All bikes fixed'
   end
 
   def add_bike(bike)
