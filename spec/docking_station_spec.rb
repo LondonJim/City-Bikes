@@ -44,12 +44,12 @@ describe DockingStation do
   describe '#dock' do
 
     it 'stores a bike object' do
-      expect(@docking_station.dock(@bike)).to eq([@bike])
+      expect(@docking_station.add_bike(@bike)).to eq([@bike])
     end
 
     it 'raises an error when full' do
-      20.times { @docking_station.dock(@bike)}
-      expect { @docking_station.dock(@bike) }.to raise_error 'Docking station full'
+      20.times { @docking_station.add_bike(@bike)}
+      expect { @docking_station.add_bike(@bike) }.to raise_error 'Capacity full'
     end
 
   end
@@ -61,13 +61,13 @@ describe DockingStation do
       allow(@broken_bike).to receive(:broken).and_return(true)
       @docking_station.instance_variable_set(:@bikes, [@broken_bike, @broken_bike, @bike, @bike])
 
-      expect(@docking_station.release_broken_bikes).to eq([@broken_bike, @broken_bike])
+      expect(@docking_station.release_broken_bike).to eq(@broken_bike)
     end
 
     it 'raises error if no broken bikes' do
       @docking_station.instance_variable_set(:@bikes, [@bike, @bike])
 
-      expect { @docking_station.release_broken_bikes }.to raise_error 'No bikes available'
+      expect { @docking_station.release_broken_bike }.to raise_error 'No bikes available'
     end
 
   end
