@@ -23,7 +23,7 @@ describe DockingStation do
       expect { @docking_station.release_bike }.to raise_error 'No bikes available'
     end
 
-    it 'returns bike object that is not broken true' do
+    it 'returns bike object that is not broken' do
       @broken_bike = double(Bike)
       allow(@broken_bike).to receive(:broken).and_return(true)
       @docking_station.instance_variable_set(:@bikes, [@broken_bike, @bike, @broken_bike])
@@ -50,6 +50,24 @@ describe DockingStation do
     it 'raises an error when full' do
       20.times { @docking_station.dock(@bike)}
       expect { @docking_station.dock(@bike) }.to raise_error 'Docking station full'
+    end
+
+  end
+
+  describe '#release_broken_bikes' do
+
+    it 'returns an array of broken bikes' do
+      @broken_bike = double(Bike)
+      allow(@broken_bike).to receive(:broken).and_return(true)
+      @docking_station.instance_variable_set(:@bikes, [@broken_bike, @broken_bike, @bike, @bike])
+
+      expect(@docking_station.release_broken_bikes).to eq([@broken_bike, @broken_bike])
+    end
+
+    it 'raises error if no broken bikes' do
+      @docking_station.instance_variable_set(:@bikes, [@bike, @bike])
+
+      expect { @docking_station.release_broken_bikes }.to raise_error 'No bikes available'
     end
 
   end
